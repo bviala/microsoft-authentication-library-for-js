@@ -184,21 +184,14 @@ It is extremely important to unsubscribe. Implement `ngOnDestroy()` in your comp
 import { EventMessage, EventType } from '@azure/msal-browser';
 import { filter, Subject, takeUntil } from 'rxjs';
 
-private readonly _destroying$ = new Subject<void>();
-
 this.msalBroadcastService.msalSubject$
     .pipe(
         filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS),
-        takeUntil(this._destroying$)
+        takeUntilDestroyed()
     )
     .subscribe((result) => {
         this.checkAccount();
     });
-
-ngOnDestroy(): void {
-    this._destroying$.next(null);
-    this._destroying$.complete();
-}
 ```
 
 # Next Steps
